@@ -1,6 +1,6 @@
 # defEYE
 
-defEYE v1.2 is a local-only Tauri v2 desktop sentinel for Windows 10/11. It records webcam video and full screen video through `ffmpeg`, captures selected-primary or merged multi-monitor screenshots through `xcap`, and stays hidden unless summoned.
+defEYE v1.0 is a local-only Tauri v2 desktop sentinel for Windows 10/11. It records webcam video and full screen video through `ffmpeg`, captures selected-primary or merged multi-monitor screenshots through `xcap`, and stays hidden unless summoned.
 
 Tagline: **The Unblinking Sentinel**
 
