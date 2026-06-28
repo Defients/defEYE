@@ -1,8 +1,16 @@
-# defEYE
+<p align="center">
+  <img src="assets/banner.png" alt="defEYE" width="900">
+</p>
 
-**The Unblinking Sentinel**
+<h1 align="center">defEYE</h1>
+
+<p align="center">
+Professional surveillance and evidence capture built with Tauri + Rust.
+</p>
 
 defEYE v1.0.0 is a local-only Tauri v2 desktop sentinel for Windows 10/11. It records webcam video and full screen video through `ffmpeg`, captures selected-primary or merged multi-monitor screenshots through `xcap`, monitors your webcam for motion, listens for voice commands, optionally analyzes captures with a local AI vision model — and stays hidden unless summoned.
+
+![](assets/ss1.png)
 
 ---
 
