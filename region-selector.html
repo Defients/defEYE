@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Select Region</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: rgba(0,0,0,0.6); cursor: crosshair; user-select: none; }
+#overlay { position: fixed; inset: 0; }
+#hint {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  background: rgba(24,24,27,0.95); color: #e4e4e7;
+  padding: 8px 16px; border-radius: 8px; font-size: 14px;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5); pointer-events: none;
+  z-index: 100;
+}
+#selection {
+  position: fixed; border: 2px solid #34d399;
+  pointer-events: none; z-index: 50;
+}
+#size-label {
+  position: absolute; left: 4px; top: 4px;
+  background: rgba(16,185,129,0.8); color: white;
+  padding: 2px 6px; border-radius: 4px;
+  font-size: 10px; font-family: system-ui, sans-serif;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+<div id="overlay"></div>
+<div id="hint">Drag to select region &mdash; Esc or right-click to cancel</div>
+<div id="selection" style="display:none;"><div id="size-label"></div></div>
+<script>
+(function() {
+  var dragging = false;
+  var startX = 0, startY = 0;
+  var sel = document.getElementById('selection');
+  var sizeLabel = document.getElementById('size-label');
+
+  function invoke(cmd, args) {
+    if (window.__TAURI_INTERNALS__) {
+      return window.__TAURI_INTERNALS__.invoke(cmd, args || {});
+    }
+    return Promise.reject('No Tauri internals');
+  }
+
+  function closeSelector() {
+    invoke('close_region_selector');
+  }
+
+  function updateSel(x, y, w, h) {
+    sel.style.display = 'block';
+    sel.style.left = x + 'px';
+    sel.style.top = y + 'px';
+    sel.style.width = w + 'px';
+    sel.style.height = h + 'px';
+    sel.style.boxShadow = '0 0 0 9999px rgba(0,0,0,0.6)';
+    sizeLabel.textContent = Math.round(w) + ' x ' + Math.round(h);
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeSelector(); }
+  });
+
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    closeSelector();
+  });
+
+  document.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    dragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    updateSel(startX, startY, 0, 0);
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    var x = Math.min(startX, e.clientX);
+    var y = Math.min(startY, e.clientY);
+    var w = Math.abs(e.clientX - startX);
+    var h = Math.abs(e.clientY - startY);
+    updateSel(x, y, w, h);
+  });
+
+  document.addEventListener('mouseup', function(e) {
+    if (!dragging) return;
+    dragging = false;
+    var x = Math.min(startX, e.clientX);
+    var y = Math.min(startY, e.clientY);
+    var w = Math.abs(e.clientX - startX);
+    var h = Math.abs(e.clientY - startY);
+
+    if (w > 5 && h > 5) {
+      invoke('set_region_from_selector', { x: x, y: y, width: w, height: h })
+        .then(function() { closeSelector(); })
+        .catch(function() { closeSelector(); });
+    } else {
+      closeSelector();
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>defEYE — Sentinel</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("defeye-theme");
+          if (t === "sentinel" || t === "amber" || t === "cosmotech") {
+            document.documentElement.setAttribute("data-theme", t);
+          } else {
+            document.documentElement.setAttribute("data-theme", "sentinel");
+          }
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "sentinel");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

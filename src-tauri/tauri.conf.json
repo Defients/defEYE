@@ -1,0 +1,44 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "defEYE",
+  "version": "1.0.0",
+  "identifier": "com.deffy.defeye",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://127.0.0.1:1422",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [],
+    "security": {
+      "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/icon.ico", "icons/defEYE.png"],
+    "externalBin": [],
+    "resources": {
+      "lib/vosk-extracted/vosk-win64-0.3.45/libvosk.dll": "libvosk.dll",
+      "lib/vosk-extracted/vosk-win64-0.3.45/libgcc_s_seh-1.dll": "libgcc_s_seh-1.dll",
+      "lib/vosk-extracted/vosk-win64-0.3.45/libstdc++-6.dll": "libstdc++-6.dll",
+      "lib/vosk-extracted/vosk-win64-0.3.45/libwinpthread-1.dll": "libwinpthread-1.dll"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    }
+  }
+}
